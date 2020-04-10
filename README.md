@@ -8,15 +8,21 @@ The goal of this library is to represent routes in state, in the purely function
 
 `Redux` is the purest state management system at the time of publication*
 
-Additionally, `Redux` manages a single [global state](https://redux.js.org/api/store), and since the current route is a global value, this is a good fit
+Additionally, `Redux` manages a single [global state](https://redux.js.org/api/store), and since the current route is a global value, this is a good fit. On top of that, both `Redux` and `fp-ts-routing` use ADTs in a usefully composable way (`RouteActions` can compose `Routes`), so it's _really_ a good fit. 
 
-`Redux` allows a function from some arbitrary ADT to a state transformation. This function is [called the `reducer`](https://redux.js.org/basics/reducers) and it's formatted like this
+`Redux` manages a function from some arbitrary ADT to a state transformation
 
-```ts
-const reducer: (s: AppState, a: ActionADT) => AppState = (...) => ...;
+```
+ADT => State => State
 ```
 
-Your reducer, along with initial state, is given to [an object called the `store`](https://redux.js.org/api/store)
+Except it's old so it's not curried so it looks like this instead
+
+```ts
+const myReducer: (s: State, a: ADT) => State = ...
+```
+
+This function is [called the `reducer`](https://redux.js.org/basics/reducers), and the ADT is [called an Action](https://redux.js.org/basics/actions). Your reducer, along with initial state, is given to a simple state manager [called the `store`](https://redux.js.org/api/store)
 
 ```ts
 const store = createStore(myReducer, initialState);
@@ -25,7 +31,7 @@ const store = createStore(myReducer, initialState);
 Doing this:
 
 ```ts
-store.dispatch(actionADT.doSomething)
+store.dispatch(someActionADT)
 ```
 
 Will invoke our `reducer` and trigger a global state transformation. This allows us to encapsulate our app's side effects into our `reducer`
