@@ -135,7 +135,9 @@ We must consider `redux` asynchronous middlewares
 
 `redux-observable` ties `redux` together with `rxjs` (the [best](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/mapping/highland/whyrx.md) streaming solution in typescript) with [`Epic`](https://redux-observable.js.org/docs/basics/Epics.html)s that return `Observable`s that are in turn subscribed to your `store`'s `dispatch` with middleware
 
-In fact, since our `router` is naturally an `Observable`, we can replace our `routeMiddleware` with a `routeObservable`. We can map our `RouteAction`s to make asynchronous calls to `fetch` and push `ResponseAction`s
+In fact, since our `router` is naturally an `Observable`, we can replace our `routeMiddleware` with a `routeObservable`
+
+We can map our `RouteAction`s to make asynchronous calls to `fetch` that push `ResponseAction`s
 
 We must push the original `RouteAction` as well so we can update our `Route` in our app's state
 
