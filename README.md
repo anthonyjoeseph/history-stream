@@ -205,17 +205,20 @@ const fetchUser = Ep.epic<MyState, MyAction>()((_, action$) =>
 We are able to easily mock our `NavigationProvider` for testing
 
 ```ts
+import * as assert from "assert";
 // TODO - implement this
+assert.deepStrictEqual(TBD)
 ```
 
 ## Rerouting with redux
 
 Since rerouting is simply a `dispatch`ed side effect, we represent it as its own redux middleware.
 
-We can use an `NavigationProvider` to separate the middleware from its side effect. The default `NavigationProvider` is our `HistoryNavigationProvider`
+We can use an `NavigationProvider` to separate the middleware from its side effect. The default `NavigationProvider` is `HistoryNavigationProvider`, but lets roll our own for testing purposes:
 
 ```ts
 import * as O from 'fp-ts/lib/Option'
+import * as assert from "assert";
 import { compose } from 'redux'
 import { createStore, applyMiddleware, compose } from 'redux'
 
@@ -241,6 +244,8 @@ const store = createStore(
 
 epicMiddleware.run(myRouteEpic);
 
+// run some tests
+assert.deepStrictEqual(TBD)
 ```
 
 Note: we must use separate `RouteAction`s and `navgiationAction`s so that our `RouteAction`s don't dispatch `navigationAction`s. `RouteActions`s are for storing the current route in global state, `navigationAction`s are for modifying the brower's url. `navigationAction`s should dispatch `RouteAction`s, but not the other way around.
