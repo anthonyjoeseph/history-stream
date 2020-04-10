@@ -8,7 +8,9 @@ The goal of this library is to represent routes in state, in the purely function
 
 `Redux` is the purest state management system at the time of publication*
 
-Additionally, `Redux` manages a single [global state](https://redux.js.org/api/store), and since the current route is a global value, this is a good fit. On top of that, both `Redux` and `fp-ts-routing` use ADTs in a usefully composable way (`RouteAction`s and `NavigationAction`s can compose `Route`s), so it's a really good fit. 
+Additionally, `Redux` manages a single [global state](https://redux.js.org/api/store), and since the current route is a global value, this is a good fit.
+
+On top of that, both `Redux` and `fp-ts-routing` use ADTs in a usefully composable way (`RouteAction`s and `NavigationAction`s can compose `Route`s), so it's a really good fit. 
 
 `Redux` manages a function from some arbitrary ADT to a state transformation
 
