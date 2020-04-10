@@ -134,6 +134,7 @@ In fact, since our `router` is naturally an `Observable`, we can replace our `ro
 ```ts
 import * as Rx from 'rxjs'
 import {
+  Epic,
   createEpicMiddleware,
 } from 'redux-observable'
 import { routeObservable, RouteType } from 'fp-ts-routing-redux';
