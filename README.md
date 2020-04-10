@@ -131,7 +131,7 @@ We must consider `redux` asynchronous middlewares
 
 `redux-observable` is the `redux` asynchronous middleware that best fits our usage**
 
-`redux-observable` ties `redux` together with `rxjs` (the [best](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/mapping/highland/whyrx.md) streaming solution in typescript) by subscribing an `Observable` to your `store`'s `dispatch` with a [`redux` middleware called an `Epic`](https://redux-observable.js.org/docs/basics/Epics.html).
+`redux-observable` ties `redux` together with `rxjs` (the [best](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/mapping/highland/whyrx.md) streaming solution in typescript) with [`Epic`](https://redux-observable.js.org/docs/basics/Epics.html)s that return `Observable`s that are in turn subscribed to your `store`'s `dispatch` with middleware.
 
 In fact, since our `router` is naturally an `Observable`, we can replace our `routeMiddleware` with a `routeObservable`. We can return `routeObservable` from our `Epic` to subscribe our `RouteAction`s to our `dispatch`.
 
@@ -173,7 +173,7 @@ const store = createStore(
 epicMiddleware.run(myRouteEpic);
 ```
 
-If we want to have other asynchonous side effects, `Epic`s represent your `redux` `state` and `action` as `Observable`s called `$state` and `$action`. We can merge `routeObservable` with whatever `Observable`s you need.
+If we want to have other asynchonous side effects, `Epic`s represent your `redux` `state` and `action` as `Observable`s called `$state` and `$action`. We can merge `routeObservable` with whatever `Observable`s you need
 
 ```ts
 const myRouteEpic: Epic<MyAction, MyAction, MyState> = (
@@ -196,11 +196,11 @@ This is still impure. We are using side effects without safely demarcating them 
 
 A `Stream` is an `Effect`ful `Observable` 
 
-Our `router` is a `Stream` that accepts a `NavigationProvider`
+Our `routeStream` is a `Stream` that accepts a `NavigationProvider`
 
 `@matechs-epics` allows us to represent our `redux-observable` `Epic` as a `Stream`
 
-So our `routeStream` goes inside a `Stream` goes inside an `Epic` goes inside `redux` as middleware
+So our `routeStream` is a `Stream` that, alongside our `NavigationProvider`, goes inside an `Epic` that goes inside `redux-observable` middleware that goes inside `redux`
 
 ```ts
 import { stream as S, effect as T } from '@matechs/effect';
@@ -223,9 +223,9 @@ assert.deepStrictEqual(TBD)
 
 ## Rerouting with redux
 
-Since rerouting is simply a `dispatch`ed side effect, we represent it as its own redux middleware.
+Since rerouting is simply a `dispatch`ed side effect, we represent it as its own redux middleware
 
-We can use an `NavigationProvider` to separate the middleware from its side effect. The default `NavigationProvider` is `HistoryNavigationProvider`, but lets roll our own for testing purposes:
+We can use an `NavigationProvider` to separate the middleware from its side effect. The default `NavigationProvider` is `HistoryNavigationProvider`, but lets roll our own for testing purposes
 
 ```ts
 import * as O from 'fp-ts/lib/Option'

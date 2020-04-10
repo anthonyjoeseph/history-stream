@@ -1,18 +1,20 @@
+import * as O from 'fp-ts/lib/Option';
+import { flow } from 'fp-ts/lib/function';
+import { pipe } from 'fp-ts/lib/pipeable';
+import {
+  Parser, parse, Route,
+} from 'fp-ts-routing';
+import { stream as S, effect as T } from '@matechs/effect';
 import {
   Middleware,
   MiddlewareAPI,
   Dispatch,
   Action,
 } from 'redux';
-import {
-  Parser, parse, Route,
-} from 'fp-ts-routing';
+import { Observable } from 'rxjs';
 import * as History from 'history';
 import { Navigation } from '.';
 import { RouteType } from './RouteType';
-import { flow } from 'fp-ts/lib/function';
-import { Observable } from 'rxjs';
-import { stream as S, effect as T } from '@matechs/effect';
 
 const history = History.createBrowserHistory();
 
@@ -43,14 +45,21 @@ export const routeMiddleware = <R, A extends Action, S, D extends Dispatch>(
 ): Middleware<{}, S, D> => (
   { dispatch }: MiddlewareAPI<D, S>,
 ): (next: (action: A) => A) => (action: A) => A => {
-  history.listen(flow(
-    (location, historyAction) => toAction(
+  const dispatchRoute = flow(
+    (location: History.Location, historyAction: History.Action) => toAction(
       parse(parser, Route.parse(location.pathname), notFoundRoute),
       historyActionToRouteType(historyAction)
     ),
     dispatch,
-  ));
-  return next => (action: A): A => next(action);
+  );
+
+  return flow(
+    // dispatch the initial route
+    () => dispatchRoute(history.location, history.action),
+    // then listen for more incoming routes
+    () => history.listen(dispatchRoute),
+    () => (next: (action: A) => A) => (action: A): A => next(action)
+  )();
 }
 
 export const routeObservable = <R>(
@@ -58,12 +67,20 @@ export const routeObservable = <R>(
   notFoundRoute: R,
 ): Observable<[R, RouteType]> => {
   const c = new Observable<[R, RouteType]>(subscriber => {
-    return history.listen((location, historyAction) => {
-      subscriber.next([
+    const pushRoute = flow(
+      (location: History.Location, historyAction: History.Action): [R, RouteType] => ([
         parse(parser, Route.parse(location.pathname), notFoundRoute),
-        historyActionToRouteType(historyAction),
-      ]);
-    });
+        historyActionToRouteType(historyAction)
+      ]),
+      subscriber.next,
+    );
+    return flow(
+      // push the initial route
+      () => pushRoute(history.location, history.action),
+      // then listen for incoming routes
+      // returns an unsubscriber
+      () => history.listen(pushRoute),
+    )();
   });
   return c;
 };
@@ -73,13 +90,13 @@ export const routeStream = <R>(): S.Stream<T.NoEnv, T.NoErr, number> => S.empty;
 
 export const navigationMiddleware = <R, A extends Action, S, D extends Dispatch>(
   formatter: ((r: R) => string),
-  fromAction: (action: A) => Navigation<R>,
+  fromAction: (action: A) => O.Option<Navigation<R>>,
 ): Middleware<{}, S, D> => () => {
-  return (next: (action: A) => A) => (action: A): A => {
-    flow(
-      () => fromAction(action),
-      navigate(formatter),
-    );
-    return next(action);
-  };
+  return (next: (action: A) => A) => (action: A): A => flow(
+    () => pipe(
+      fromAction(action),
+      O.map(navigate(formatter)),
+    ),
+    () => next(action)
+  )();
 }
