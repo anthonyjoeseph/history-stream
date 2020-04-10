@@ -131,9 +131,9 @@ We must consider `redux` asynchronous middlewares
 
 `redux-observable` is the `redux` asynchronous middleware that best fits our usage**
 
-`redux-observable` ties `redux` together with `rxjs` (the [best](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/mapping/highland/whyrx.md) streaming solution in typescript) by representing your `redux` `state` and `action` as `Observable`s inside a `redux` middleware called an `Epic`
+`redux-observable` ties `redux` together with `rxjs` (the [best](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/mapping/highland/whyrx.md) streaming solution in typescript) by subscribing an `Observable` to your `store`'s `dispatch` with a [`redux` middleware called an `Epic`](https://redux-observable.js.org/docs/basics/Epics.html).
 
-In fact, since our `router` is naturally an `Observable`, we can replace our `routeMiddleware` with a `routeObservable`. We can merge `routeObservable` with `$action` so that we can dispatch a `ResponseAction` as the result of `RouteAction`s from either `Observable`. We also dispatch the original `RouteAction` so we can update the route in our `AppState`.
+In fact, since our `router` is naturally an `Observable`, we can replace our `routeMiddleware` with a `routeObservable`. We can return `routeObservable` from our `Epic` to subscribe our `RouteAction`s to our `dispatch`.
 
 (`RouteType` is just a wrapper for a [`history` `action`](https://github.com/ReactTraining/history/blob/master/docs/GettingStarted.md#listening) with a less confusing name in this context)
 
@@ -145,33 +145,23 @@ import {
 } from 'redux-observable'
 import { routeObservable, RouteType } from 'fp-ts-routing-redux';
 
-const myRouteObservable: Rx.Observable<MyAction> = routeObservable<MyRoute>(
+const myRouteObservable: Rx.Observable<ResponseAction> = routeObservable<MyRoute>(
   parser,
   notFoundRoute
 ).pipe(
-  map(([r]: [MyRoute, RouteType]): MyAction => _RouteAction.of....),
+  Rx.map(([route]: [MyRoute, RouteType]): MyAction => _RouteAction.of.route(route)),
+  Rx.map(
+    (action: RouteAction): Observable<Response> => fromFetch(
+      'https://jsonplaceholder.typicode.com/posts/1',
+    ),
+  ),
+  Rx.mergeAll(),
+  Rx.map((resp: Response): ResponseAction => _ResponseAction.of....)
 );
 
-const myRouteEpic: Epic<MyAction, RouteAction, MyState> = (
-  action$: Rx.Observable<MyAction>,
-): Rx.Observable<RouteAction | ResponseAction> => Rx.merge(
-  action$,
-  myRouteObservable,
-).pipe(
-  Rx.filter(_MyAction.is.routeAction),
-  Rx.map((routeAction: RouteAction): Observable<ResponseAction | RouteAction> => Rx.merge(
-    routeAction,
-    routeActon.pipe(
-      Rx.map(
-        (action: RouteAction): Observable<Response> => fromFetch(
-          'https://jsonplaceholder.typicode.com/posts/1',
-        ),
-      ),
-      Rx.mergeAll(),
-      Rx.map((resp: Response): ResponseAction => _ResponseAction.of....)
-    ),
-  )),
-);
+const myRouteEpic: Epic<
+  MyAction, ResponseAction, MyState
+> = (): Rx.Observable<ResponseAction> => myRouteObservable;
 
 const myEpicMiddleware = createEpicMiddleware();
 
@@ -183,7 +173,22 @@ const store = createStore(
 epicMiddleware.run(myRouteEpic);
 ```
 
-This is an imperfect solution. We are using side effects without safely demarcating them as IO. How would we mock this for testing?
+If we want to have other asynchonous side effects, `Epic`s represent your `redux` `state` and `action` as `Observable`s called `$state` and `$action`. We can merge `routeObservable` with whatever `Observable`s you need.
+
+```ts
+const myRouteEpic: Epic<MyAction, MyAction, MyState> = (
+  action$: Rx.Observable<MyAction>,
+): Rx.Observable<MyAction> => Rx.merge(
+  myRouteObservable,
+  action$.pipe(
+    // your other asynchronous code
+    Rx.filter(...),
+    ...
+  ),
+);
+```
+
+This is still impure. We are using side effects without safely demarcating them as IO. How would we mock this for testing?
 
 ## Triggering asynchronous side-effects from route events with `@matechs/epics`
 
