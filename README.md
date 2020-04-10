@@ -8,9 +8,9 @@ The goal of this library is to represent routes in state, in the purely function
 
 `Redux` is the purest state management system at the time of publication*
 
-Additionally, `Redux` manages a single [global state](https://redux.js.org/api/store), and since the current route is a global value, this is a good fit.
+Additionally, `Redux` manages a single [global state](https://redux.js.org/api/store), and since the current route is a global value, this is a good fit
 
-On top of that, both `Redux` and `fp-ts-routing` use ADTs in a usefully composable way (`RouteAction`s and `NavigationAction`s can compose `Route`s), so it's a really good fit. 
+On top of that, `Redux` and `fp-ts-routing` use ADTs in a usefully composable way (`RouteAction`s and `NavigationAction`s can compose `Route`s), so it's a really good fit 
 
 `Redux` manages a function from some arbitrary ADT to a state transformation
 
@@ -133,9 +133,9 @@ We must consider `redux` asynchronous middlewares
 
 `redux-observable` is the `redux` asynchronous middleware that best fits our usage**
 
-`redux-observable` ties `redux` together with `rxjs` (the [best](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/mapping/highland/whyrx.md) streaming solution in typescript) with [`Epic`](https://redux-observable.js.org/docs/basics/Epics.html)s that return `Observable`s that are in turn subscribed to your `store`'s `dispatch` with middleware.
+`redux-observable` ties `redux` together with `rxjs` (the [best](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/mapping/highland/whyrx.md) streaming solution in typescript) with [`Epic`](https://redux-observable.js.org/docs/basics/Epics.html)s that return `Observable`s that are in turn subscribed to your `store`'s `dispatch` with middleware
 
-In fact, since our `router` is naturally an `Observable`, we can replace our `routeMiddleware` with a `routeObservable`. We can return `routeObservable` from our `Epic` to subscribe our `RouteAction`s to our `dispatch`.
+In fact, since our `router` is naturally an `Observable`, we can replace our `routeMiddleware` with a `routeObservable`. We can return `routeObservable` from our `Epic` to subscribe our `RouteAction`s to our `dispatch`
 
 (`RouteType` is just a wrapper for a [`history` `action`](https://github.com/ReactTraining/history/blob/master/docs/GettingStarted.md#listening) with a less confusing name in this context)
 
@@ -263,6 +263,6 @@ assert.deepStrictEqual(TBD)
 
 Note: we must use separate `RouteAction`s and `navgiationAction`s so that our `RouteAction`s don't dispatch `navigationAction`s. `RouteActions`s are for storing the current route in global state, `navigationAction`s are for modifying the brower's url. `navigationAction`s should dispatch `RouteAction`s, but not the other way around.
 
-\* `Redux` uses function composition, while [`Flux` uses callback registration](https://stackoverflow.com/questions/32461229/why-use-redux-over-facebook-flux). `Redux` state is immutable, while [`Mobx` state is mutable](https://mobx-react.js.org/state-mutable)
+\* `Redux` uses function composition, while [`Flux` uses callback registration](https://stackoverflow.com/questions/32461229/why-use-redux-over-facebook-flux). `Redux` state is immutable, while [`Mobx` state is mutable](https://mobx-react.js.org/state-mutable).
 
 \** `redux-thunk` accepts any function, while `redux-observable` enforces purity by requiring your impure asynchronous function to be demarcated as an `Observer`. `redux-saga` has a similar approach using [generator functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*), but [`Observable`s are monadic](https://github.com/gcanti/fp-ts-rxjs). `redux-loop`, rather than being a middleware, allows the reducer itself to behave asynchronously, but `Cmd` has no way to compose with outside event streams, which is what our router must do.
