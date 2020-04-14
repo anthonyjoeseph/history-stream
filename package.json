@@ -1,6 +1,6 @@
 {
   "name": "fp-ts-routing-redux",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Increasingly pure integrations of fp-ts-routing into redux",
   "main": "lib/index.js",
   "repository": "https://github.com/anthonyjoeseph/fp-ts-routing-redux",
@@ -16,7 +16,6 @@
     "react": ">= 16.13.1"
   },
   "dependencies": {
-    "@matechs/effect": "^5.0.24",
     "@types/history": "^4.7.5",
     "@types/react": "^16.9.27",
     "@types/redux": "^3.6.0",
