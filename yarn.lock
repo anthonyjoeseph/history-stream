@@ -30,11 +30,6 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@matechs/effect@^5.0.24":
-  version "5.0.24"
-  resolved "https://registry.yarnpkg.com/@matechs/effect/-/effect-5.0.24.tgz#4c317acf2c03fe526e5d022202a91294ad4e52c1"
-  integrity sha512-4n/105KY+Ym8BuiWzojBbCgxstGzDD5wEWMktAV4V19KcyGHQzVeO7t/rsHJlyRdMHDb5MO/ZEudXpMReAbpCw==
-
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
@@ -817,6 +812,11 @@ react@^16.13.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
+
+redux-observable@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/redux-observable/-/redux-observable-1.2.0.tgz#ff51b6c6be2598e9b5e89fc36639186bb0e669c7"
+  integrity sha512-yeR90RP2WzZzCxxnQPlh2uFzyfFLsfXu8ROh53jGDPXVqj71uNDMmvi/YKQkd9ofiVoO4OYb1snbowO49tCEMg==
 
 redux@*, redux@^4.0.5:
   version "4.0.5"

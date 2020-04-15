@@ -1,17 +1,11 @@
 import { Navigation } from './Navigation';
 import { RouteType } from './RouteType';
 import {
-  routeMiddleware,
-  routeObservable,
-  routeStream,
-  navigationMiddleware,
+  router,
 } from './Router';
 
 export {
   Navigation,
   RouteType,
-  routeMiddleware,
-  routeObservable,
-  routeStream,
-  navigationMiddleware,
+  router,
 };
