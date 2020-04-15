@@ -25,7 +25,7 @@ export const router = <R, A extends Action, S, D extends Dispatch>(
   parser: (path: string) => R,
   formatter: ((r: R) => string),
   onRoute: (route: R, getState: () => S, routeType: RouteType) => A,
-  navigate: (action: A, getState: () => S) => Navigation<R>,
+  navigate: (action: A, getState: () => S) => Navigation<R> | undefined,
 ): {
   middleware: Middleware<{}, S, D>;
   dispatchFirstRoute: (store: Store<S, A>) => A;
