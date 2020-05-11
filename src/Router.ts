@@ -4,6 +4,7 @@ import * as r from 'rxjs';
 export interface Router {
   route$: r.Observable<string>;
   navigator: Navigator;
+  currentRoute: string;
 }
 
 export interface Navigator {
@@ -21,12 +22,13 @@ export const createRouter = (): Router => {
   return {
     route$,
     navigator: history,
+    currentRoute: history.location.pathname,
   }
 }
 
-export const createMockRouter = (): Router => {
-  const sessionHistory: string[] = [];
-  let sessionHistoryIndex = -1;
+export const createMockRouter = (initialRoute: string): Router => {
+  const sessionHistory: string[] = [initialRoute];
+  let sessionHistoryIndex = 0;
   const route$ = new r.Subject<string>();
   route$.subscribe((route) => {
     sessionHistory[sessionHistoryIndex + 1] = route;
@@ -51,5 +53,6 @@ export const createMockRouter = (): Router => {
   return {
     route$: route$,
     navigator,
+    currentRoute: sessionHistory[sessionHistoryIndex]
   }
 }
