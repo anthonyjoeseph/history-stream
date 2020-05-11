@@ -26,9 +26,9 @@ export const createRouter = (): Router => {
   }
 }
 
-export const createMockRouter = (initialRoute: string): Router => {
-  const sessionHistory: string[] = [initialRoute];
-  let sessionHistoryIndex = 0;
+export const createMockRouter = (): Router => {
+  const sessionHistory: string[] = [];
+  let sessionHistoryIndex = -1;
   const route$ = new r.Subject<string>();
   route$.subscribe((route) => {
     sessionHistory[sessionHistoryIndex + 1] = route;
@@ -53,6 +53,10 @@ export const createMockRouter = (initialRoute: string): Router => {
   return {
     route$: route$,
     navigator,
-    pushCurrentRoute: (): void => route$.next(sessionHistory[sessionHistoryIndex])
+    pushCurrentRoute: (): void => {
+      if (sessionHistoryIndex < sessionHistory.length) {
+        route$.next(sessionHistory[sessionHistoryIndex]);
+      }
+    }
   }
 }

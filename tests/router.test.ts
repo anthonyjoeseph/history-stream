@@ -2,7 +2,8 @@ import { createMockRouter } from "../src/Router";
 
 describe('Router', () => {
   it('Has Mock Router', () => {
-    const router = createMockRouter('/');
+    const router = createMockRouter();
+    router.navigator.push('/');
     const routeHistory: string[] = [];
     router.route$.subscribe(r => {
       routeHistory.push(r)
