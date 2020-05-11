@@ -34,7 +34,6 @@ export const createMockRouter = (initialRoute: string): Router => {
     sessionHistory[sessionHistoryIndex + 1] = route;
     sessionHistoryIndex++;
   });
-  ;
   const go = (n: number): void => {
     if (
       sessionHistoryIndex + n >= 0
@@ -45,8 +44,8 @@ export const createMockRouter = (initialRoute: string): Router => {
     }
   };
   const navigator: Navigator = {
-    push: route$.next,
-    replace: route$.next,
+    push: r => route$.next(r),
+    replace: r => route$.next(r),
     go,
     goBack: () => go(-1),
     goForward: () => go(1),
