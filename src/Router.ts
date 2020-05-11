@@ -4,7 +4,6 @@ import * as r from 'rxjs';
 export interface Router {
   route$: r.Observable<string>;
   navigator: Navigator;
-  currentRoute: string;
 }
 
 export interface Navigator {
@@ -18,11 +17,11 @@ export interface Navigator {
 export const createRouter = (): Router => {
   const history = History.createBrowserHistory();
   const route$ = new r.Subject<string>();
-  history.listen(location => route$.next(location.pathname))
+  history.listen(location => route$.next(location.pathname));
+  route$.next(history.location.pathname)
   return {
     route$,
     navigator: history,
-    currentRoute: history.location.pathname,
   }
 }
 
@@ -34,6 +33,7 @@ export const createMockRouter = (initialRoute: string): Router => {
     sessionHistory[sessionHistoryIndex + 1] = route;
     sessionHistoryIndex++;
   });
+  route$.next(initialRoute);
   const go = (n: number): void => {
     if (
       sessionHistoryIndex + n >= 0
@@ -53,6 +53,5 @@ export const createMockRouter = (initialRoute: string): Router => {
   return {
     route$: route$,
     navigator,
-    currentRoute: sessionHistory[sessionHistoryIndex]
   }
 }
