@@ -10,6 +10,7 @@
   "types": "./lib/index.d.ts",
   "dependencies": {
     "@types/history": "^4.7.5",
+    "assert": "^2.0.0",
     "history": "^4.10.1",
     "rxjs": "^6.5.5"
   },

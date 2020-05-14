@@ -1,16 +1,28 @@
+import * as assert from 'assert';
+import * as r from 'rxjs';
+import * as ro from 'rxjs/operators';
 import { createMockRouter } from "../src/Router";
 
 describe('Router', () => {
-  it('Has Mock Router', () => {
+  it('Has Mock Router', async () => {
     const router = createMockRouter();
+
+    const closeRouter = new r.Subject();
+    const routeHistory = router.route$
+      .pipe(
+        ro.takeUntil(closeRouter),
+        ro.toArray(),
+      )
+      .toPromise();
+    
     router.navigator.push('/');
-    const routeHistory: string[] = [];
-    router.route$.subscribe(r => {
-      routeHistory.push(r)
-    })
-    router.pushCurrentRoute();
-    expect(routeHistory[0] === '/').toBeTruthy();
     router.navigator.push('newRoute');
-    expect(routeHistory[1] === 'newRoute').toBeTruthy();
+    router.pushCurrentRoute();
+
+    closeRouter.next();
+    await routeHistory.then(r => assert.deepStrictEqual(
+      r,
+      ['/', 'newRoute', 'newRoute'],
+    ))
   });
 });
