@@ -38,3 +38,8 @@ export const createRouter: () => Router
 export const createMockRouter: () => Router
 
 ```
+
+# TODO
+
+- add leading slashes to routes in mock navigate
+- support [async iterables](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of)

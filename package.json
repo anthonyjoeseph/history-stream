@@ -1,6 +1,6 @@
 {
   "name": "rxjs-first-router",
-  "version": "0.0.12",
+  "version": "0.0.39",
   "description": "A mockable take on redux-first-router using reactive streams",
   "main": "lib/index.js",
   "repository": "https://github.com/anthonyjoeseph/rxjs-first-router",
