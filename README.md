@@ -46,4 +46,5 @@ export const createMockRouter: () => Router
 - add leading slashes to routes in mock navigate
 - support [async iterables](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of)
 - support [@most/core](https://github.com/cujojs/most)
+- same interface for all with [tagless final](https://dev.to/gcanti/functional-design-tagless-final-332k)
 - change name to 'history-async'
