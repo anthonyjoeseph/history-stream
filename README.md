@@ -49,4 +49,5 @@ export const createMockRouter: () => Router
 - support [bacon.js](https://github.com/baconjs/bacon.js)
 - support [xstream](https://github.com/staltz/xstream)
 - support [kefir](https://github.com/kefirjs/kefir)
+- support [highland js](https://highlandjs.org/)
 - change name to 'history-async'
