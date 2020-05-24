@@ -2,6 +2,8 @@
 
 A simpler, mockable take on [redux-first-router](https://github.com/faceyspacey/redux-first-router) using [reactive streams](https://rxjs-dev.firebaseapp.com/)
 
+Supports the [window.history api](https://developer.mozilla.org/en-US/docs/Web/API/Window/history) with cross-browser support from [history](https://github.com/ReactTraining/history)
+
 # Interfaces
 
 | Interface | Usage |
@@ -43,3 +45,9 @@ export const createMockRouter: () => Router
 
 - add leading slashes to routes in mock navigate
 - support [async iterables](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of)
+- support [@most/core](https://github.com/cujojs/most)
+- support [bacon.js](https://github.com/baconjs/bacon.js)
+- support [xstream](https://github.com/staltz/xstream)
+- support [kefir](https://github.com/kefirjs/kefir)
+- support [highland js](https://highlandjs.org/)
+- change name to 'history-async'
