@@ -1,7 +1,7 @@
 import * as History from 'history';
 import * as r from 'rxjs';
 
-export interface Router {
+export interface RxjsRouter {
   route$: r.Observable<string>;
   navigator: Navigator;
   pushCurrentRoute: () => void;
@@ -15,7 +15,7 @@ export interface Navigator {
   goForward: () => void;
 }
 
-export const createRouter = (): Router => {
+export const createRxjsRouter = (): RxjsRouter => {
   const history = History.createBrowserHistory();
   const route$ = new r.Subject<string>();
   history.listen(location => route$.next(location.pathname));
@@ -26,7 +26,7 @@ export const createRouter = (): Router => {
   }
 }
 
-export const createMockRouter = (): Router => {
+export const createMockRxjsRouter = (): RxjsRouter => {
   const sessionHistory: string[] = [];
   let sessionHistoryIndex = -1;
   const route$ = new r.Subject<string>();

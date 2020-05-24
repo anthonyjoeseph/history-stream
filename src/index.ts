@@ -1,13 +1,13 @@
 import {
-  Router,
+  RxjsRouter,
   Navigator,
-  createRouter,
-  createMockRouter,
+  createRxjsRouter,
+  createMockRxjsRouter,
 } from './Router';
 
 export {
-  Router,
+  RxjsRouter,
   Navigator,
-  createRouter,
-  createMockRouter,
+  createRxjsRouter,
+  createMockRxjsRouter,
 };

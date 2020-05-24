@@ -1,9 +1,9 @@
 {
-  "name": "rxjs-first-router",
+  "name": "history-stream",
   "version": "0.0.39",
-  "description": "A mockable take on redux-first-router using reactive streams",
+  "description": "Streaming routes in typescript",
   "main": "lib/index.js",
-  "repository": "https://github.com/anthonyjoeseph/rxjs-first-router",
+  "repository": "https://github.com/anthonyjoeseph/history-stream",
   "author": "anthonygabriele <anthonyjoeseph@gmail.com>",
   "license": "MIT",
   "prepublish": "tsc",
