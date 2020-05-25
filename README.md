@@ -1,4 +1,4 @@
-# rxjs-first-router
+# history-stream
 
 A simpler, mockable take on [redux-first-router](https://github.com/faceyspacey/redux-first-router) using [reactive streams](https://rxjs-dev.firebaseapp.com/)
 
