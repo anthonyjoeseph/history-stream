@@ -50,4 +50,5 @@ export const createMockRouter: () => Router
 - support [xstream](https://github.com/staltz/xstream)
 - support [kefir](https://github.com/kefirjs/kefir)
 - support [highland js](https://highlandjs.org/)
+- support [node `IncomingMessage`](https://nodejs.org/api/http.html)
 - change name to 'history-async'
